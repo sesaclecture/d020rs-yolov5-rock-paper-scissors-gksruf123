@@ -43,12 +43,12 @@ while True:
     # Boudning box 그리기
     for i, obj in enumerate(results.xyxy[0]):
         # 인식결과를 표시하기 위한 좌표를 얻음
-        x1, y1, x2, y2, conf, cls = obj
+        x1, y1, x2, y2, conf, cls = obj.tolist()
         x1, y1, x2, y2 = map(int, [x1, y1, x2, y2])
 
         # TODO: 인식된 정확도(confidence)와 클래스를 label로 구성
         label = get_label_name(cls)
-        confidence = f"{label} {conf:.2f}"
+        confidence = f"{label} {float(conf):.2f}"
         # TODO: 출력 바운딩박스 크기 조절
         scale_x = frame_w / input_w
         scale_y = frame_h / input_h
@@ -58,7 +58,7 @@ while True:
         y2 = int(y2 * scale_y)
         # OpenCV를 이용해서 해당 좌표에 사각형과 text를 출력
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(frame, confidence, (x1, y1 - 10),
+        cv2.putText(frame, confidence, (x1, max(0, y1 - 10)),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
         print(f"Object {i}: {label} at [{x1}, {y1}, {x2}, {y2}]")
 
